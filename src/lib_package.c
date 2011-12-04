@@ -528,6 +528,18 @@ static void setpath(lua_State *L, const char *fieldname, const char *envname,
     luaL_gsub(L, path, AUXMARK, def);
     lua_remove(L, -2);
   }
+
+  // Replace the lua root maker with the value of LUA_ROOT
+  lua_getglobal(L, "LUA_ROOT");
+  if ( lua_isnil(L, -1) ) {
+      lua_pop(L, 1);
+      lua_pushliteral(L, LUA_ROOT);
+  }
+  luaL_gsub(L, lua_tostring(L, -2), LUA_ROOT_MARK,
+            lua_tostring(L, -1));
+  lua_insert(L, -3);
+  lua_pop(L, 2);
+
   setprogdir(L);
   lua_setfield(L, -2, fieldname);
 }

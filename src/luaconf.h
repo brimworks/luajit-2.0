@@ -9,6 +9,8 @@
 #include <limits.h>
 #include <stddef.h>
 
+#define LUA_ROOT_MARK  "..."
+
 /* Default path for loading Lua and C modules with require(). */
 #if defined(_WIN32)
 /*
@@ -23,15 +25,15 @@
   ".\\?.dll;" LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll"
 #else
 #define LUA_ROOT	"/usr/local/"
-#define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
-#define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
+#define LUA_LDIR	LUA_ROOT_MARK "/share/lua/5.1/"
+#define LUA_CDIR	LUA_ROOT_MARK "/lib/lua/5.1/"
 #ifdef LUA_XROOT
 #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0-beta8/"
 #define LUA_XPATH \
   ";" LUA_XROOT "share/lua/5.1/?.lua;" LUA_XROOT "share/lua/5.1/?/init.lua"
 #define LUA_XCPATH	LUA_XROOT "lib/lua/5.1/?.so;"
 #else
-#define LUA_JDIR	LUA_ROOT "share/luajit-2.0.0-beta8/"
+#define LUA_JDIR	LUA_ROOT_MARK "/share/luajit-2.0.0-beta8/"
 #define LUA_XPATH
 #define LUA_XCPATH
 #endif

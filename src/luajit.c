@@ -500,7 +500,22 @@ static int pmain(lua_State *L)
   int script;
   int flags = 0;
   globalL = L;
-  if (argv[0] && argv[0][0]) progname = argv[0];
+  if (argv[0] && argv[0][0]) {
+    const char* end = progname = argv[0];
+    int slashes_found = 0;
+    /* dirname(dirname(progname)) */
+    while ( *end ) end++;
+    for (; 1; end-- ) {
+      if ( end < progname ) goto NO_LUA_ROOT;
+      if ( *end != '/' ) continue;
+      if ( ++slashes_found >= 2 ) break;
+      end--;
+    }
+    lua_pushlstring(L, progname, end-progname);
+    lua_setglobal(L, "LUA_ROOT");
+  }
+ NO_LUA_ROOT:
+
   LUAJIT_VERSION_SYM();  /* linker-enforced version check */
   lua_gc(L, LUA_GCSTOP, 0);  /* stop collector during initialization */
   luaL_openlibs(L);  /* open libraries */
